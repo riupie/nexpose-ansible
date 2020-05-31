@@ -1,0 +1,102 @@
+---
+- name: Perform Ad Hoc Security Scan
+  hosts: localhost
+  gather_facts: true
+
+  tasks:
+
+  - set_fact:
+      scanned_servers: "{{ (scanned_servers | default([])) + [item.name] }}"
+    loop: "{{target_servers}}"
+
+  - name: Scan Target
+    uri:
+      url: "{{ nexpose_base_api }}/sites/{{ site_id }}/scans"
+      method: POST
+      user: "{{ nexpose_username }}"
+      password: "{{ nexpose_password }}"
+      force_basic_auth: yes
+      validate_certs: no
+      headers:
+        Content-Type: application/json
+        Accept: application/json
+      body: "{{ lookup('template','templates/scan_asset.json.j2') }}"
+      body_format: json
+      status_code: 201
+      return_content: yes
+    register: scan_target
+
+  - name: Check Scan Result
+    uri:
+      url: "{{ nexpose_base_api }}/scans/{{ scan_target.json.id }}"
+      user: "{{ nexpose_username }}"
+      password: "{{ nexpose_password }}"
+      force_basic_auth: yes
+      validate_certs: no
+      return_content: yes
+    register: check_scan_results
+    until: check_scan_results.json.status == 'finished'
+    retries: 60
+    delay: 30
+  
+  - name: "Get Target Server Assets Information"
+    uri:
+      url: "{{ nexpose_base_api }}/assets/search"
+      method: POST
+      user: "{{ nexpose_username }}"
+      password: "{{ nexpose_password }}"
+      force_basic_auth: yes
+      validate_certs: no
+      headers:
+        Content-Type: application/json
+      body: "{{ lookup('template','templates/search_asset.json.j2') }}"
+      body_format: json
+      return_content: yes
+    register: get_target_asset
+
+  - name: Get Asset Vulnerabilities
+    uri:
+      url: "{{ nexpose_base_api }}/assets/{{ item.id }}/vulnerabilities?size={{ nexpose_vulnerabilities_records_per_page }}"
+      user: "{{ nexpose_username }}"
+      password: "{{ nexpose_password }}"
+      force_basic_auth: yes
+      validate_certs: no
+      return_content: yes
+    register: get_asset_vulnerabilities
+    loop: "{{get_target_asset.json.resources}}"
+
+  - name: Clean Up Reports Directory if it exists
+    file:
+      path: reports
+      state: absent
+
+  - name: Create Reports Directory
+    file:
+      path: reports/{{item.item.hostName}}
+      state: directory
+      mode: 0755
+    loop: "{{get_asset_vulnerabilities.results}}"
+
+  - name: Create VM Vulnerabilities Report
+    template:
+      src: vulnerability_report_adhoc.html.j2
+      dest: reports/{{ item.item.hostName }}/vulnerability_report.html
+    loop: "{{get_asset_vulnerabilities.results}}"
+
+  - name: Send Email with Report
+    mail:
+      host: smtp.gmail.com
+      port: 587
+      username: "{{ gmail_account }}"
+      password: "{{ gmail_account_password }}"
+      to: Rahmat Agung <agung@btech.id>
+      subject: "Ansible Report"
+      body: "The vunlerabilities report of {{ target_servers }} can found in the attached file"
+      attach:
+       - reports/{{target_servers}}/vulnerability_report.html
+    loop: "{{ target_servers }}"
+
+  - name: Clean Up Reports Directory
+    file:
+      path: reports
+      state: absent

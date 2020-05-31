@@ -1,0 +1,8 @@
+{
+    "date": "{{ ansible_date_time.date }}",
+    "hostName": {
+        "name": "{{ item.name }}",
+        "source": "dns"
+    },
+    "ip": "{{ item.ip }}",
+}

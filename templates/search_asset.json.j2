@@ -1,0 +1,10 @@
+{
+    "filters": [
+        {
+            "field": "host-name",
+            "operator": "contains",
+            "value": {{scanned_servers|to_json}},
+        }
+    ],
+    "match": "all"
+}
