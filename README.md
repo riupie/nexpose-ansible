@@ -13,11 +13,9 @@ The playbooks in this repository is meant to
 
 User will need to provide information for the following variables
 
-1. target_server - Server to be added
-2. target_server_id - IP Address of Server to be added
-3. site_id - The ID of site in Nexpose Rapid7
-4. asset_group_id - The ID of the asset group
-
+1. target_servers - Server to be added
+2. site_id - The ID of site in Nexpose Rapid7
+3. template_id - The ID of template that will be used during scan.
 The workflow will perform the following tasks
 
 1. Create entry for the new VM in Nexpose Rapid7
@@ -42,5 +40,5 @@ The end result will look like the following
 
 User will need to provide information for the following variables
 
-1. target_server - Server to be added
+1. target_servers - Server to be added
 2. site_id - The ID of site in Nexpose Rapid7
