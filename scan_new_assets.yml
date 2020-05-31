@@ -113,11 +113,11 @@
       username: "{{ gmail_account }}"
       password: "{{ gmail_account_password }}"
       to: Rahmat Agung <agung@btech.id>
-      subject: "Ansible Report"
-      body: "The vunlerabilities report of {{ target_servers }} can found in the attached file"
+      subject: "Ansible Report - {{ item.item.item.name }}"
+      body: "The vunlerabilities report of {{ item.item.item.name }} can found in the attached file"
       attach:
-       - reports/{{target_servers}}/vulnerability_report.html
-    loop: "{{ target_servers }}"
+       - reports/{{ item.item.item.name }}/vulnerability_report.html
+    loop: "{{get_asset_vulnerabilities.results}}"
 
   - name: Clean Up Reports Directory
     file:
