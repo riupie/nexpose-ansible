@@ -32,16 +32,10 @@
     register: generate_site_report
 
   - name: Download Report
-    uri:
+    get_url:
       url: "{{ nexpose_base_api }}/reports/{{ report_id }}/history/latest/output"
-      user: "{{ nexpose_username }}"
+      dest: "./reports/report1.csv"
+      username: "{{ nexpose_username }}"
       password: "{{ nexpose_password }}"
       force_basic_auth: yes
       validate_certs: no
-      return_content: yes
-    register: download_site_report
-  - local_action:
-      module: copy
-      content: "{{ download_site_report }}"
-      dest: "reports/report.csv"
-

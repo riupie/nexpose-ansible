@@ -1,0 +1,13 @@
+- name: Download Site Report
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - name: Download Report
+    get_url:
+      url: "{{ nexpose_base_api }}/reports/{{ report_id }}/history/latest/output"
+      dest: "./reports/report1.csv"
+      username: "{{ nexpose_username }}"
+      password: "{{ nexpose_password }}"
+      force_basic_auth: yes
+      validate_certs: no
