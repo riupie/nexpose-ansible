@@ -1,0 +1,47 @@
+- name: Site Report
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - name: Create Site Report
+    uri:
+      url: "{{ nexpose_base_api }}/reports"
+      method: POST
+      user: "{{ nexpose_username }}"
+      password: "{{ nexpose_password }}"
+      force_basic_auth: yes
+      validate_certs: no
+      headers:
+        Content-Type: application/json
+        Accept: application/json
+      body: "{{ lookup('template','templates/create_report.json.j2') }}"
+      body_format: json
+      status_code: 201
+      return_content: yes
+    register: create_site_report
+
+  - name: Generate Report
+    uri:
+      url: "{{ nexpose_base_api }}/reports/{{ report_id }}/generate"
+      method: POST
+      user: "{{ nexpose_username }}"
+      password: "{{ nexpose_password }}"
+      force_basic_auth: yes
+      validate_certs: no
+      return_content: yes
+    register: generate_site_report
+
+  - name: Download Report
+    uri:
+      url: "{{ nexpose_base_api }}/reports/{{ report_id }}/history/latest/output"
+      user: "{{ nexpose_username }}"
+      password: "{{ nexpose_password }}"
+      force_basic_auth: yes
+      validate_certs: no
+      return_content: yes
+    register: download_site_report
+  - local_action:
+      module: copy
+      content: "{{ download_site_report }}"
+      dest: "reports/report.csv"
+
