@@ -1,14 +1,15 @@
 ---
 gmail_account: '<example@gmail.com>'
 gmail_account_password: '<your_password>'
-nexpose_base_api: 'https://<nexpose_ip>:3780/api/3'
-nexpose_username: '<nexpose_username>'
-nexpose_password: '<nexpose_password>'
+nexpose_base_api: 'https://nexpose-ip:3780/api/3'
+nexpose_username: 'username'
+nexpose_password: 'password'
 nexpose_vulnerabilities_records_per_page: 100
 site_id: '1'
 template_id: 'linux-rpm' #API to change template_id not work
+report_id: '14'  #Increment from last report id https://nexpose-ip:3780/api/3/reports
 target_servers:
-  - name: 'server1.domain.com'
-    ip: '10.10.10.1'
-  - name: 'server2.domain.com'
-    ip: '103.93.56.155'
+  - name: 'target'
+    ip: '10.10.10.10'
+  - name: 'target2'
+    ip: '10.10.10.20'
