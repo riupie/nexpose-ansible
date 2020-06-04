@@ -1,19 +1,19 @@
 ---
 gmail_account: '<example@gmail.com>'
 gmail_account_password: '<your_password>'
-nexpose_base_api: 'https://103.89.7.19:3780/api/3'
-nexpose_username: 'sdmoko'
-nexpose_password: 'Tanjung8_14'
+nexpose_base_api: 'https://<nexpose-ip>:3780/api/3'
+nexpose_username: '<username>'
+nexpose_password: '<password>'
 nexpose_vulnerabilities_records_per_page: 100
 site_id: '1'
 asset_group_id: '1'
-asset_group_name: 'target-app-group' #target group name
+asset_group_name: '<asset group name>' #target group name
 template_id: 'cis' #API to change template_id not work
 report_id: '20'  #Increment from last report id https://nexpose-ip:3780/api/3/reports
 ssk-user: ''
 private_key: "{{ lookup('file', id_rsa) }}"
 target_servers:
-  - name: 'target.uucp.my.id'
-    ip: '103.93.57.24'
-  - name: 'target2.uucp.my.id'
-    ip: '103.93.56.155'
+  - name: 'target'
+    ip: '10.10.10.10'
+  - name: 'target2'
+    ip: '10.10.10.20'
