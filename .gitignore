@@ -1,1 +1,2 @@
-group_vars/*.bk
+group_vars/**.bk
+group_vars/*.yml.bk
