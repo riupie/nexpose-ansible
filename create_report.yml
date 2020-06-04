@@ -14,7 +14,7 @@
       headers:
         Content-Type: application/json
         Accept: application/json
-      body: "{{ lookup('template','templates/create_report.json.j2') }}"
+      body: "{{ lookup('template','templates/reports/create_report.json.j2') }}"
       body_format: json
       status_code: 201
       return_content: yes

@@ -1,13 +1,17 @@
 ---
 gmail_account: '<example@gmail.com>'
 gmail_account_password: '<your_password>'
-nexpose_base_api: 'https://nexpose-ip:3780/api/3'
-nexpose_username: 'username'
-nexpose_password: 'password'
+nexpose_base_api: 'https://<nexpose-ip>:3780/api/3'
+nexpose_username: '<username>'
+nexpose_password: '<password>'
 nexpose_vulnerabilities_records_per_page: 100
 site_id: '1'
-template_id: 'linux-rpm' #API to change template_id not work
-report_id: '14'  #Increment from last report id https://nexpose-ip:3780/api/3/reports
+asset_group_id: '1'
+asset_group_name: '<asset group name>' #target group name
+template_id: 'cis' #API to change template_id not work
+report_id: '20'  #Increment from last report id https://nexpose-ip:3780/api/3/reports
+ssh_user: ''
+private_key: "{{ lookup('file', id_rsa) }}"
 target_servers:
   - name: 'target'
     ip: '10.10.10.10'
