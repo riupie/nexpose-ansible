@@ -1,2 +1,2 @@
-group_vars/**.bk
-group_vars/*.yml.bk
+group_vars/id_rsa.bk
+group_vars/all.yml.bk

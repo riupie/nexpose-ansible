@@ -10,7 +10,7 @@ asset_group_id: '1'
 asset_group_name: '<asset group name>' #target group name
 template_id: 'cis' #API to change template_id not work
 report_id: '20'  #Increment from last report id https://nexpose-ip:3780/api/3/reports
-ssk-user: ''
+ssh_user: ''
 private_key: "{{ lookup('file', id_rsa) }}"
 target_servers:
   - name: 'target'
